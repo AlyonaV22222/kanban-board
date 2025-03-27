@@ -1,33 +1,50 @@
-HEADThis project implements a GitHub repo issues viewer as a Kanban board where users can load issues from any GitHub repository, categorize them into different columns, and manage them interactively.
+# React + TypeScript + Vite
 
-Requirements
-Repo URL Input: The user should enter the repository URL in the input field on top of the page (e.g., https://github.com/facebook/react), then press "Load."
+This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
-Load Issues: The app will load issues from the repository using the GitHub API.
+Currently, two official plugins are available:
 
-Kanban Columns: The app contains three columns:
+- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
+- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
 
-ToDo: All new (open) issues.
+## Expanding the ESLint configuration
 
-In Progress: Open issues that have an assignee.
+If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
 
-Done: Closed issues.
+- Configure the top-level `parserOptions` property like this:
 
-Drag-and-Drop: Users should be able to drag and drop issues between columns and reorder them.
+```js
+export default tseslint.config({
+  languageOptions: {
+    // other options...
+    parserOptions: {
+      project: ['./tsconfig.node.json', './tsconfig.app.json'],
+      tsconfigRootDir: import.meta.dirname,
+    },
+  },
+})
+```
 
-Persistence: The app should store the current issue position (column and order) between sessions in the browser. When the user loads different repos, changes made to issues in one repo should be retained across sessions.
+- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
+- Optionally add `...tseslint.configs.stylisticTypeChecked`
+- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
 
-Links: Users should be able to visit the repository owner's profile and the repository itself via links under the input field.
+```js
+// eslint.config.js
+import react from 'eslint-plugin-react'
 
-Technologies Used
-React 18 with Hooks (No class components)
-
-TypeScript for static typing
-
-UI Library: Ant Design for a responsive and modern UI.
-
-State Management: Redux Toolkit for managing the app state.
-
-Drag-and-Drop: React DnD with the HTML5 backend for drag-and-drop functionality.
-
-Build Tool: Vite for fast development and building.
+export default tseslint.config({
+  // Set the react version
+  settings: { react: { version: '18.3' } },
+  plugins: {
+    // Add the react plugin
+    react,
+  },
+  rules: {
+    // other rules...
+    // Enable its recommended rules
+    ...react.configs.recommended.rules,
+    ...react.configs['jsx-runtime'].rules,
+  },
+})
+```
